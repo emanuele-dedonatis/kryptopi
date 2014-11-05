@@ -1,0 +1,11 @@
+/usr/local/arm-cs-tools/bin/arm-none-eabi-as vectors.s -o vectors.o
+/usr/local/arm-cs-tools/bin/arm-none-eabi-gcc -Wall -O2 -nostdlib -nostartfiles -ffreestanding  -c ./library/serial.c -o ./library/serial.o
+/usr/local/arm-cs-tools/bin/arm-none-eabi-gcc -Wall -O2 -nostdlib -nostartfiles -ffreestanding  -c ./library/led.c -o ./library/led.o
+/usr/local/arm-cs-tools/bin/arm-none-eabi-gcc -Wall -O2 -nostdlib -nostartfiles -ffreestanding  -I./include -c ./library/aes.c -o ./library/aes.o
+/usr/local/arm-cs-tools/bin/arm-none-eabi-gcc -Wall -O2 -nostdlib -nostartfiles -ffreestanding  -c ./library/memory.c -o ./library/memory.o
+/usr/local/arm-cs-tools/bin/arm-none-eabi-gcc -Wall -O2 -nostdlib -nostartfiles -ffreestanding  -I./include -c kryptopi.c -o kryptopi.o
+/usr/local/arm-cs-tools/bin/arm-none-eabi-ld vectors.o kryptopi.o ./library/serial.o ./library/aes.o ./library/memory.o ./library/led.o -T memmap -o kryptopi.elf
+/usr/local/arm-cs-tools/bin/arm-none-eabi-objdump -D kryptopi.elf > kryptopi.list
+/usr/local/arm-cs-tools/bin/arm-none-eabi-objcopy kryptopi.elf -O ihex kryptopi.hex
+/usr/local/arm-cs-tools/bin/arm-none-eabi-objcopy kryptopi.elf -O binary kryptopi.bin
+mv kryptopi.bin kernel.img
